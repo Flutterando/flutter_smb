@@ -7,9 +7,9 @@ description: |
 output: 'lib/flutter_smb_bindings_generated.dart'
 headers:
   entry-points:
-    - 'src/libflutter_smb.h'
+    - 'src/flutter_smb.h'
   include-directives:
-    - 'src/libflutter_smb.h'
+    - 'src/flutter_smb.h'
 preamble: |
   // ignore_for_file: always_specify_types
   // ignore_for_file: camel_case_types
