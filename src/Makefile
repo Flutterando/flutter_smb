@@ -95,3 +95,17 @@ windows:
 	GOARCH=amd64 \
 	CC=x86_64-w64-mingw32-gcc \
 	go build -buildmode=c-shared -o ../windows/x64/${SHARED_LIB_NAME}.dll cmd/shared/shared.go
+
+linux-x86_64:
+	CGO_ENABLED=1 \
+	GOOS=linux \
+	GOARCH=amd64 \
+	go build -buildmode=c-shared -o ../linux/x64/${SHARED_LIB_NAME}.so cmd/shared/shared.go
+
+linux-arm64:
+	CGO_ENABLED=1 \
+	GOOS=linux \
+	GOARCH=arm64 \
+	go build -buildmode=c-shared -o ../linux/arm64/${SHARED_LIB_NAME}.so cmd/shared/shared.go
+
+linux: linux-x86_64 linux-arm64
