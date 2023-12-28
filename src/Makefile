@@ -88,3 +88,10 @@ macos: macos-x86_64 macos-arm64
 	$(CP) ./flutter_smb.c ../macos/Classes/flutter_smb.c
 	$(CP) ./flutter_smb.h ../macos/Classes/flutter_smb.h
 	$(RM) ./macosbuild
+
+windows: 
+	CGO_ENABLED=1 \
+	GOOS=windows \
+	GOARCH=amd64 \
+	CC=x86_64-w64-mingw32-gcc \
+	go build -buildmode=c-shared -o ../windows/x64/${SHARED_LIB_NAME}.dll cmd/shared/shared.go
