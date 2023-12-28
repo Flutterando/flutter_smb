@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "flutter_smb.h": "c"
+        "flutter_smb.h": "c",
+        "golib.h": "c",
+        "pthread.h": "c",
+        "libgo.h": "c"
     }
 }

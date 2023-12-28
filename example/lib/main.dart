@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_smb/flutter_smb.dart' as flutter_smb;
 
 void main() {
@@ -23,6 +23,8 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     sumResult = flutter_smb.sum(1, 2);
     sumAsyncResult = flutter_smb.sumAsync(3, 4);
+    final string = flutter_smb.checkPc();
+    print(string);
   }
 
   @override
@@ -55,8 +57,7 @@ class _MyAppState extends State<MyApp> {
                 FutureBuilder<int>(
                   future: sumAsyncResult,
                   builder: (BuildContext context, AsyncSnapshot<int> value) {
-                    final displayValue =
-                        (value.hasData) ? value.data : 'loading';
+                    final displayValue = (value.hasData) ? value.data : 'loading';
                     return Text(
                       'await sumAsync(3, 4) = $displayValue',
                       style: textStyle,

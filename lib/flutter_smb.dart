@@ -1,10 +1,15 @@
-
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:ffi/ffi.dart';
+
 import 'flutter_smb_bindings_generated.dart';
+
+String checkPc() {
+  return _bindings.checkPc().toDartString();
+}
 
 /// A very short-lived native function.
 ///
@@ -51,7 +56,6 @@ final DynamicLibrary _dylib = () {
 
 /// The bindings to the native functions in [_dylib].
 final FlutterSmbBindings _bindings = FlutterSmbBindings(_dylib);
-
 
 /// A request to compute `sum`.
 ///

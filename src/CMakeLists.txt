@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 project(flutter_smb_library VERSION 0.0.1 LANGUAGES C)
 
 set(GO_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/go")
-set(GO_LIBRARY_OUTPUT "golib.dylib")
+set(GO_LIBRARY_OUTPUT "libgo")
+
+set(GO_LIBRARY_EXT "a")
+
 
 add_subdirectory(go)
 
@@ -18,6 +21,12 @@ set_target_properties(flutter_smb PROPERTIES
 )
 target_compile_definitions(flutter_smb PUBLIC DART_SHARED_LIB)
 
-target_link_libraries(flutter_smb PRIVATE go_lib)
+# Adiciona e configura a biblioteca estática do GoLang
+add_library(go_lib_imported STATIC IMPORTED)
+set_target_properties(go_lib_imported PROPERTIES
+  IMPORTED_LOCATION "${GO_SOURCE_DIR}/${GO_LIBRARY_OUTPUT}.${GO_LIBRARY_EXT}"
+)
+
+target_link_libraries(flutter_smb PRIVATE go_lib_imported)
 
 add_dependencies(flutter_smb go_lib)

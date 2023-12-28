@@ -8,24 +8,21 @@
 // ignore_for_file: type=lint
 import 'dart:ffi' as ffi;
 
+import 'package:ffi/ffi.dart';
+
 /// Bindings for `src/flutter_smb.h`.
 ///
 /// Regenerate bindings with `flutter pub run ffigen --config ffigen.yaml`.
 ///
 class FlutterSmbBindings {
   /// Holds the symbol lookup function.
-  final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
-      _lookup;
+  final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) _lookup;
 
   /// The symbols are looked up in [dynamicLibrary].
-  FlutterSmbBindings(ffi.DynamicLibrary dynamicLibrary)
-      : _lookup = dynamicLibrary.lookup;
+  FlutterSmbBindings(ffi.DynamicLibrary dynamicLibrary) : _lookup = dynamicLibrary.lookup;
 
   /// The symbols are looked up with [lookup].
-  FlutterSmbBindings.fromLookup(
-      ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
-          lookup)
-      : _lookup = lookup;
+  FlutterSmbBindings.fromLookup(ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) lookup) : _lookup = lookup;
 
   /// A very short-lived native function.
   ///
@@ -42,9 +39,7 @@ class FlutterSmbBindings {
     );
   }
 
-  late final _sumPtr =
-      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.IntPtr, ffi.IntPtr)>>(
-          'sum');
+  late final _sumPtr = _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.IntPtr, ffi.IntPtr)>>('sum');
   late final _sum = _sumPtr.asFunction<int Function(int, int)>();
 
   /// A longer lived native function, which occupies the thread calling it.
@@ -62,17 +57,13 @@ class FlutterSmbBindings {
     );
   }
 
-  late final _sum_long_runningPtr =
-      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.IntPtr, ffi.IntPtr)>>(
-          'sum_long_running');
-  late final _sum_long_running =
-      _sum_long_runningPtr.asFunction<int Function(int, int)>();
+  late final _sum_long_runningPtr = _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.IntPtr, ffi.IntPtr)>>('sum_long_running');
+  late final _sum_long_running = _sum_long_runningPtr.asFunction<int Function(int, int)>();
 
-  void test() {
-    return _test();
+  ffi.Pointer<Utf8> checkPc() {
+    return _checkPc();
   }
 
-  late final _testPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('test');
-  late final _test = _testPtr.asFunction<void Function()>();
+  late final _checkPcPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function()>>('checkPc');
+  late final _checkPc = _checkPcPtr.asFunction<ffi.Pointer<Utf8> Function()>();
 }

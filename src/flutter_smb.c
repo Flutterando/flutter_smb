@@ -22,7 +22,7 @@ FFI_PLUGIN_EXPORT intptr_t sum_long_running(intptr_t a, intptr_t b) {
   return a + b;
 }
 
-FFI_PLUGIN_EXPORT void test() {
-  MinhaFuncao();
+FFI_PLUGIN_EXPORT char* checkPc(void) {
+  return goCheckPc(0);
 }
 
