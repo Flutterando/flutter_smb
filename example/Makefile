@@ -11,3 +11,5 @@ run:
 
 run-macos:
 	flutter run -d macos
+run-windows:
+	flutter run -d windows
