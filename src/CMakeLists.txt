@@ -1,32 +1,30 @@
 cmake_minimum_required(VERSION 3.10)
-project(flutter_smb_library VERSION 0.0.1 LANGUAGES C)
 
-set(GO_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/go")
-set(GO_LIBRARY_OUTPUT "libgo")
+project(libflutter_smb VERSION 0.0.1)
 
-set(GO_LIBRARY_EXT "a")
+# Localização do arquivo fonte Go
+set(GO_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmd/shared/shared.go")
 
+# Definindo a saída da biblioteca com base na plataforma
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/build/windows/x64/${PROJECT_NAME}.dll")
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/build/linux/x64/${PROJECT_NAME}.so")
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")  # macOS
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/build/macos/${PROJECT_NAME}.dylib")
+else()
+    message(FATAL_ERROR "Platform not supported")
+endif()
 
-add_subdirectory(go)
-
-add_library(flutter_smb SHARED
-  "flutter_smb.c"
+add_custom_command(
+  OUTPUT ${GO_LIBRARY_OUTPUT}
+  COMMAND go build -buildmode=c-shared -o ${GO_LIBRARY_OUTPUT} ${GO_SOURCE_FILE}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  DEPENDS ${GO_SOURCE_FILE}
+  COMMENT "Building Go Library"
 )
 
-target_include_directories(flutter_smb PRIVATE "${GO_SOURCE_DIR}")
-
-set_target_properties(flutter_smb PROPERTIES
-  PUBLIC_HEADER flutter_smb.h
-  OUTPUT_NAME "flutter_smb"
+add_custom_target(
+  go_library ALL
+  DEPENDS ${GO_LIBRARY_OUTPUT}
 )
-target_compile_definitions(flutter_smb PUBLIC DART_SHARED_LIB)
-
-# Adiciona e configura a biblioteca estática do GoLang
-add_library(go_lib_imported STATIC IMPORTED)
-set_target_properties(go_lib_imported PROPERTIES
-  IMPORTED_LOCATION "${GO_SOURCE_DIR}/${GO_LIBRARY_OUTPUT}.${GO_LIBRARY_EXT}"
-)
-
-target_link_libraries(flutter_smb PRIVATE go_lib_imported)
-
-add_dependencies(flutter_smb go_lib)
