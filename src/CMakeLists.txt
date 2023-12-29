@@ -2,16 +2,17 @@ cmake_minimum_required(VERSION 3.10)
 
 project(libflutter_smb VERSION 0.0.1)
 
-# Localização do arquivo fonte Go
 set(GO_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmd/shared/shared.go")
 
-# Definindo a saída da biblioteca com base na plataforma
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/build/windows/x64/${PROJECT_NAME}.dll")
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dll" PARENT_SCOPE)
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dll")
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/build/linux/x64/${PROJECT_NAME}.so")
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.so" PARENT_SCOPE)
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.so")
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")  # macOS
-    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/build/macos/${PROJECT_NAME}.dylib")
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dylib" PARENT_SCOPE)
+    set(GO_LIBRARY_OUTPUT "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dylib")
 else()
     message(FATAL_ERROR "Platform not supported")
 endif()
