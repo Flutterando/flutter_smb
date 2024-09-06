@@ -43,7 +43,8 @@ const String _libName = 'flutter_smb';
 /// The dynamic library in which the symbols for [FlutterSmbBindings] can be found.
 final DynamicLibrary _dylib = () {
   if (Platform.isMacOS || Platform.isIOS) {
-    return DynamicLibrary.open('$_libName.framework/$_libName');
+    final dylib = DynamicLibrary.open('$_libName.framework/$_libName');
+    return dylib;
   }
   if (Platform.isAndroid || Platform.isLinux) {
     return DynamicLibrary.open('lib$_libName.so');

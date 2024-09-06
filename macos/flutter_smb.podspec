@@ -1,7 +1,3 @@
-#
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint flutter_smb.podspec` to validate before publishing.
-#
 Pod::Spec.new do |s|
   s.name             = 'flutter_smb'
   s.version          = '0.0.1'
@@ -13,19 +9,20 @@ A new Flutter FFI plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
 
-  # This will ensure the source files in Classes/ are included in the native
-  # builds of apps using this FFI plugin. Podspec does not support relative
-  # paths, so Classes contains a forwarder C file that relatively imports
-  # `../src/*` so that the C sources can be shared among all target platforms.
+  # build para a biblioteca Go
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
-  s.vendored_libraries = 'libgo.a'
-  # Inclua os cabeçalhos necessários
-  s.preserve_paths = 'Classes/**/*.h'
-  s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SRCROOT)/Classes' }
-
+  s.public_header_files = 'Classes/**/*.h'
   s.dependency 'FlutterMacOS'
+  s.vendored_libraries  = 'libgo.dylib'
   s.platform = :osx, '10.11'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
+  # Script de build para a biblioteca Go
+  # s.script_phase = {
+  #   :name => 'Build Go Library',
+  #   :script => 'cd ${SRCROOT}/../../../src && make macos',
+  #   :execution_position => :before_compile
+  # }
+  
 end

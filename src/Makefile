@@ -65,29 +65,29 @@ android-x86_64:
 
 android: android-armv7a android-arm64 android-x86 android-x86_64
 
-macos-x86_64:
-	CGO_ENABLED=1 \
-	GOOS=darwin \
-	GOARCH=amd64 \
-	go build -buildmode=c-archive -o ./macosbuild/${LIB_NAME}_x86.a cmd/static/static.go
-
-macos-arm64:
+macos:
 	CGO_ENABLED=1 \
 	GOOS=darwin \
 	GOARCH=arm64 \
-	go build -buildmode=c-archive -o ./macosbuild/${LIB_NAME}_arm64.a cmd/static/static.go
+	SDK=macos \
+	go build -trimpath -buildmode=c-shared -o ${LIB_NAME}_arm64.dylib cmd/shared/shared.go
 
-macos: macos-x86_64 macos-arm64
-	lipo -create \
-		./macosbuild/${LIB_NAME}_x86.a \
-		./macosbuild/${LIB_NAME}_arm64.a \
-		-output ./macosbuild/${LIB_NAME}.a
+	CGO_ENABLED=1 \
+	GOOS=darwin \
+	GOARCH=amd64 \
+	SDK=macos \
+	go build -trimpath -buildmode=c-shared -o ${LIB_NAME}_amd64.dylib cmd/shared/shared.go
 
-	$(CP) ./macosbuild/${LIB_NAME}.a ../macos/${LIB_NAME}.a
-	$(CP) ./macosbuild/${LIB_NAME}_arm64.h ../macos/Classes/go/${LIB_NAME}.h
-	$(CP) ./flutter_smb.c ../macos/Classes/flutter_smb.c
-	$(CP) ./flutter_smb.h ../macos/Classes/flutter_smb.h
-	$(RM) ./macosbuild
+	lipo \
+		-create \
+		${LIB_NAME}_arm64.dylib \
+		${LIB_NAME}_amd64.dylib \
+		-output ${LIB_NAME}.dylib
+
+	install_name_tool -id "@rpath/${LIB_NAME}.dylib" ${LIB_NAME}.dylib
+	mv ${LIB_NAME}.dylib ../macos/${LIB_NAME}.dylib
+	rm ${LIB_NAME}_*.h
+	rm ${LIB_NAME}_*.dylib
 
 windows: 
 	CGO_ENABLED=1 \
@@ -102,10 +102,4 @@ linux-x86_64:
 	GOARCH=amd64 \
 	go build -buildmode=c-shared -o ../linux/x64/${SHARED_LIB_NAME}.so cmd/shared/shared.go
 
-linux-arm64:
-	CGO_ENABLED=1 \
-	GOOS=linux \
-	GOARCH=arm64 \
-	go build -buildmode=c-shared -o ../linux/arm64/${SHARED_LIB_NAME}.so cmd/shared/shared.go
-
-linux: linux-x86_64 linux-arm64
+linux: linux-x86_64
